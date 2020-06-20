@@ -38,11 +38,11 @@ function checkApache() {
 
     switch(status) {
       case 'Active':
-        $('#switch-apache').attr('checked', true);
+        tickApache();
 
         break;
       case 'Inactive':
-        $('#switch-apache').attr('checked', false);
+        untickApache();
         
         break;
       default:
@@ -55,6 +55,18 @@ function checkApache() {
   });
 }
 
+function tickApache() {
+  $('#switch-apache').attr('checked', true);
+  $('#apache-status').text('Active');
+  $('#apache-status').removeClass('text-danger').addClass('text-success');
+}
+
+function untickApache() {
+  $('#switch-apache').attr('checked', false);
+  $('#apache-status').text('Inactive');
+  $('#apache-status').removeClass('text-success').addClass('text-danger');
+}
+
 function switchToPhp5() {
   let command = 'a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6';
 
@@ -62,6 +74,7 @@ function switchToPhp5() {
     if (err) throw err;
 
     checkPhpVersion();
+    restartApache();
   });
 }
 
@@ -72,6 +85,7 @@ function switchToPhp7() {
     if (err) throw err;
 
     checkPhpVersion();
+    restartApache();
   });
 }
 
@@ -80,6 +94,8 @@ function startApache() {
 
   sudo.exec(command, sudo_option, function(err, stdout, stderr) {
     if(err) throw err;
+
+    checkApache();
   });
 }
 
@@ -88,22 +104,27 @@ function stopApache() {
 
   sudo.exec(command, sudo_option, function(err, stdout, stderr) {
     if(err) throw err;
+
+    checkApache();
   });
 }
 
 function restartApache() {
-  $('#switch-apache').attr('checked', false);
+  untickApache();
 
   let command = 'service apache2 restart';
 
   sudo.exec(command, sudo_option, function(err, stdout, stderr) {
     if(err) throw err;
+
+    checkApache();
   });
 }
 
 $(document).ready(function() {
   $(function() {
     checkPhpVersion();
+    checkApache();
   });
 
   $('body').on('change', '#dropdown-php', function() {
@@ -118,6 +139,18 @@ $(document).ready(function() {
         break;
       default:
         break;
+    }
+  });
+
+  $('body').on('change', '#switch-apache', function() {
+    $('#apache-status').html(`<div class="spinner-border spinner-border-sm text-dark">
+        <span class="sr-only">Loading...</span>
+      </div>`);
+    
+    if($(this).is(':checked')) {
+      startApache();
+    } else {
+      stopApache();
     }
   });
 });
