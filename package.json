@@ -1,0 +1,20 @@
+{
+  "name": "lamp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . --ignore=node_modules/electron",
+    "pack-win32": "asar pack lamp-win32-x64/resources/app mplayr-win32-x64/resources/app.asar",
+    "pack-win32-x64": "asar pack lamp-win32-x64/resources/app mplayr-win32-x64/resources/app.asar"
+  },
+  "keywords": [],
+  "author": "Karl T. Macadangdang <karljarren0308@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "asar": "^3.0.3",
+    "electron": "^9.0.4",
+    "electron-packager": "^14.2.1"
+  }
+}
