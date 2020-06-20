@@ -1,5 +1,6 @@
-const $ = require('jquery');
+const exec = require('child_process').exec;
 const sudo = require('sudo-prompt');
+const $ = require('jquery');
 
 require('popper.js');
 require('bootstrap');
@@ -26,13 +27,16 @@ function switchToPhp7() {
 
 function checkPhpVersion() {
   let command = 'php -v';
+  let shell = exec(command);
 
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if(err) throw err;
-
+  shell.stdout.on('data', function(data) {
     let current_php_version = stdout.substr(4, 3);
 
     $('#dropdown-php').val(current_php_version);
+  });
+
+  shell.stderr.on('data', function(err) {
+    console.error(err);
   });
 }
 
@@ -64,11 +68,14 @@ function restartApache() {
 
 function checkApache() {
   let command = 'service apache2 status';
+  let shell = exec(command);
 
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if(err) throw err;
+  shell.stdout.on('data', function(data) {
+    console.log(data);
+  });
 
-    console.log(stdout);
+  shell.stderr.on('data', function(err) {
+    console.error(err);
   });
 }
 
