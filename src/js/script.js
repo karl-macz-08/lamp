@@ -61,7 +61,11 @@ function restartApache() {
 }
 
 function checkApache() {
-  let shell = exec('sudo service apache2 restart');
+  let shell = exec('sudo service apache2 status');
+
+  shell.stdout.on('data', (data) => {
+    console.log(data);
+  });
 
   shell.stderr.on('data', (data) => {
     console.error(data);
