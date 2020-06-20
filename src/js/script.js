@@ -5,7 +5,7 @@ require('popper.js');
 require('bootstrap');
 
 function switchToPhp5() {
-  let shell = exec('sudo a2dismod php7.2; sudo a2enmod php5.6; sudo update-alternatives --set php /usr/bin/php5.6');
+  let shell = exec('a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6');
 
   shell.stderr.on('data', (data) => {
     console.error(data);
@@ -13,7 +13,7 @@ function switchToPhp5() {
 }
 
 function switchToPhp7() {
-  let shell = exec('sudo a2dismod php5.6; sudo a2enmod php7.2; sudo update-alternatives --set php /usr/bin/php7.2');
+  let shell = exec('a2dismod php5.6; a2enmod php7.2; update-alternatives --set php /usr/bin/php7.2');
 
   shell.stderr.on('data', (data) => {
     console.error(data);
@@ -35,7 +35,7 @@ function checkPhpVersion() {
 }
 
 function startApache() {
-  let shell = exec('sudo service apache2 start');
+  let shell = exec('service apache2 start');
 
   shell.stderr.on('data', (data) => {
     console.error(data);
@@ -43,7 +43,7 @@ function startApache() {
 }
 
 function stopApache() {
-  let shell = exec('sudo service apache2 stop');
+  let shell = exec('service apache2 stop');
 
   shell.stderr.on('data', (data) => {
     console.error(data);
@@ -53,7 +53,7 @@ function stopApache() {
 function restartApache() {
   $('#switch-apache').attr('checked', false);
 
-  let shell = exec('sudo service apache2 restart');
+  let shell = exec('service apache2 restart');
 
   shell.stderr.on('data', (data) => {
     console.error(data);
@@ -61,7 +61,7 @@ function restartApache() {
 }
 
 function checkApache() {
-  let shell = exec('sudo service apache2 status');
+  let shell = exec('service apache2 status');
 
   shell.stdout.on('data', (data) => {
     console.log(data);
