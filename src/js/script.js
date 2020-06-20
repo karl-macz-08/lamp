@@ -9,48 +9,6 @@ const sudo_option = {
   name: 'LAMP Administrative Privilege'
 };
 
-function switchToPhp5() {
-  let command = 'a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6';
-
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if (err) throw err;
-  });
-}
-
-function switchToPhp7() {
-  let command = 'a2dismod php5.6; a2enmod php7.2; update-alternatives --set php /usr/bin/php7.2';
-
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if (err) throw err;
-  });
-}
-
-function startApache() {
-  let command = 'service apache2 start';
-
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if(err) throw err;
-  });
-}
-
-function stopApache() {
-  let command = 'service apache2 stop';
-
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if(err) throw err;
-  });
-}
-
-function restartApache() {
-  $('#switch-apache').attr('checked', false);
-
-  let command = 'service apache2 restart';
-
-  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
-    if(err) throw err;
-  });
-}
-
 function checkPhpVersion() {
   let command = 'php -v';
   let shell = exec(command);
@@ -78,6 +36,52 @@ function checkApache() {
 
   shell.stderr.on('data', function(err) {
     console.error(err);
+  });
+}
+
+function switchToPhp5() {
+  let command = 'a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6';
+
+  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
+    if (err) throw err;
+
+    checkPhpVersion();
+  });
+}
+
+function switchToPhp7() {
+  let command = 'a2dismod php5.6; a2enmod php7.2; update-alternatives --set php /usr/bin/php7.2';
+
+  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
+    if (err) throw err;
+
+    checkPhpVersion();
+  });
+}
+
+function startApache() {
+  let command = 'service apache2 start';
+
+  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
+    if(err) throw err;
+  });
+}
+
+function stopApache() {
+  let command = 'service apache2 stop';
+
+  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
+    if(err) throw err;
+  });
+}
+
+function restartApache() {
+  $('#switch-apache').attr('checked', false);
+
+  let command = 'service apache2 restart';
+
+  sudo.exec(command, sudo_option, function(err, stdout, stderr) {
+    if(err) throw err;
   });
 }
 
