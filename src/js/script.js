@@ -1,74 +1,70 @@
 const $ = require('jquery');
-const exec = require('child_process').exec;
+const sudo = require('sudo-prompt');
 
 require('popper.js');
 require('bootstrap');
 
 function switchToPhp5() {
-  let shell = exec('a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6');
+  let command = 'a2dismod php7.2; a2enmod php5.6; update-alternatives --set php /usr/bin/php5.6';
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if (err) throw err;
   });
 }
 
 function switchToPhp7() {
-  let shell = exec('a2dismod php5.6; a2enmod php7.2; update-alternatives --set php /usr/bin/php7.2');
+  let command = 'a2dismod php5.6; a2enmod php7.2; update-alternatives --set php /usr/bin/php7.2';
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if (err) throw err;
   });
 }
 
 function checkPhpVersion() {
-  let shell = exec('php -v');
+  let command = 'php -v';
 
-  shell.stdout.on('data', (data) => {
-    let current_php_version = data.substr(4, 3);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if(err) throw err;
+
+    let current_php_version = stdout.substr(4, 3);
 
     $('#dropdown-php').val(current_php_version);
-  });
-
-  shell.stderr.on('data', (data) => {
-    console.error(data);
   });
 }
 
 function startApache() {
-  let shell = exec('service apache2 start');
+  let command = 'service apache2 start';
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if(err) throw err;
   });
 }
 
 function stopApache() {
-  let shell = exec('service apache2 stop');
+  let command = 'service apache2 stop';
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if(err) throw err;
   });
 }
 
 function restartApache() {
   $('#switch-apache').attr('checked', false);
 
-  let shell = exec('service apache2 restart');
+  let command = 'service apache2 restart';
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+  sudo.exec(command, function(err, stdout, stderr) {
+    if(err) throw err;
   });
 }
 
 function checkApache() {
-  let shell = exec('service apache2 status');
+  let command = 'service apache2 status';
 
-  shell.stdout.on('data', (data) => {
-    console.log(data);
-  });
+  sudo.exec(command, function(err, stdout, stderr) {
+    if(err) throw err;
 
-  shell.stderr.on('data', (data) => {
-    console.error(data);
+    console.log(stdout);
   });
 }
 
