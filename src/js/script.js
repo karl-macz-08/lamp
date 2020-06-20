@@ -31,7 +31,23 @@ function checkApache() {
   let shell = exec(command);
 
   shell.stdout.on('data', function(data) {
-    console.log(data);
+    let status = data.split("\n")[2].trim();
+    status = status.substring(8, status.indexOf('since') - 2);
+    status = status.split(' ')[0];
+    status = status[0].toUpperCase() + status.substring(1);
+
+    switch(status) {
+      case 'Active':
+        $('#switch-apache').attr('checked', true);
+
+        break;
+      case 'Inactive':
+        $('#switch-apache').attr('checked', false);
+        
+        break;
+      default:
+        break;
+    }
   });
 
   shell.stderr.on('data', function(err) {
