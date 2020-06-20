@@ -57,8 +57,8 @@ function checkPhpVersion() {
 
   shell.stdout.on('data', function(data) {
     let current_php_version = data.substr(4, 3);
-
-    $('#dropdown-php').find('option').attr('selected', false);
+    
+    $('#dropdown-php').find('option:selected').attr('selected', false);
     $('#dropdown-php').find(`option[value="${current_php_version}"]`).attr('selected', true);
     $('#dropdown-php').val(current_php_version);
   });
@@ -99,7 +99,5 @@ $(document).ready(function() {
       default:
         break;
     }
-
-    checkPhpVersion();
   });
 });
