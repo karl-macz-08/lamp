@@ -25,21 +25,6 @@ function switchToPhp7() {
   });
 }
 
-function checkPhpVersion() {
-  let command = 'php -v';
-  let shell = exec(command);
-
-  shell.stdout.on('data', function(data) {
-    let current_php_version = stdout.substr(4, 3);
-
-    $('#dropdown-php').val(current_php_version);
-  });
-
-  shell.stderr.on('data', function(err) {
-    console.error(err);
-  });
-}
-
 function startApache() {
   let command = 'service apache2 start';
 
@@ -63,6 +48,21 @@ function restartApache() {
 
   sudo.exec(command, sudo_option, function(err, stdout, stderr) {
     if(err) throw err;
+  });
+}
+
+function checkPhpVersion() {
+  let command = 'php -v';
+  let shell = exec(command);
+
+  shell.stdout.on('data', function(data) {
+    let current_php_version = data.substr(4, 3);
+
+    $('#dropdown-php').val(current_php_version);
+  });
+
+  shell.stderr.on('data', function(err) {
+    console.error(err);
   });
 }
 
